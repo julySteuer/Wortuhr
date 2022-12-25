@@ -8,6 +8,12 @@ namespace Storage {
         String password;
     };
 
+    void storeString(String input, int offset) {
+        for (int i = 0;i <= input.length();i++) {
+            EEPROM.write(i+offset, (int)input.charAt(i));
+        }
+    }
+    
     void storeCredentials(t_Crendentials creds) { // Expensive operation both time and hardware. The eeprom is limited to ~ 100.000 writes so we want to be careful bout the state 
         // Store has_data 0x55 means data (0x55 for "Special Reasons")
         EEPROM.write(0,0x55); // + 1
@@ -21,11 +27,6 @@ namespace Storage {
         EEPROM.write(creds.username.length()+creds.password.length()+4, '\n');
     }
 
-    void storeString(String input, int offset) {
-        for (int i = 0;i <= input.length();i++) {
-            EEPROM.write(i+offset, (int)input.charAt(i));
-        }
-    }
 
     String readString(int offset) { // Kinda tested ig 
         char curr;

@@ -1,3 +1,5 @@
+#ifndef __NETWORKING
+#define __NETWORKING
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 #include <Storage.h>
@@ -18,17 +20,35 @@ IPAddress connectWithWiFi(const char* ssid, Storage::t_Crendentials creds) {
 
 namespace WebServer {
   ESP8266WebServer server(80);
+  static const char root[] PROGMEM = "<html><form action='/submit' method='POST'><label for='username'>Username:</label><br><input type='text' id='username' name='username'><br><label for='username'>Password:</label><br><input type='text' id='username' name='username'><input type='submit'></form></html>";
 
-  void handleRoot() {
-    Serial.println("Here");
-    server.send(200, "text/html", "<h1>Hello World</h1>");
+  struct WebServerState {
+    bool isRunning;
+  } WebServerState = {false};
+
+  namespace Routes {
+    void handleRoot() {
+      server.send(200, "text/html", FPSTR(root));
+    }
+
+    void sendCredentials() {
+      String username = server.arg("username");
+      String password = server.arg("password");
+      // Save Credentials
+      // Set Global State 
+      WebServerState.isRunning = true;
+      server.send(200, "text/html", username);
+    }
   }
 
   void init_server() {
-    server.on("/", handleRoot);
+    server.begin();
+    server.on("/", Routes::handleRoot);
+    server.on("/submit", Routes::sendCredentials);
   }
 
   void run() {
     server.handleClient();
   }
 }
+#endif
