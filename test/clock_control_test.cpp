@@ -11,8 +11,8 @@
                                     TEST_ASSERT_EQUAL(expected.end, actual.end);
 
 void test_clock_parser() {
-    ClockControl::t_TimeProperty actual = ClockControl::parseTime(30,12);
-    ClockControl::t_TimeProperty expected = {1,ClockControl::Deliminator::Nach,1};
+    ClockControl::t_TimeProperty actual = ClockControl::parseTime(1,22);
+    ClockControl::t_TimeProperty expected = {20,ClockControl::Deliminator::Nach,1};
     TEST_TIME_PROPERTY(actual, expected);
 }
 
@@ -30,6 +30,5 @@ void setup() {
 }
 
 void loop() {
-    
     UNITY_END();
 }
