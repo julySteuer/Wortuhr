@@ -28,7 +28,8 @@ namespace Storage
         int offset = 0;
         EEPROM.write(offset, 0x55); // + 1
         offset++;
-        EEPROM.put(offset, creds)
+        EEPROM.put(offset, creds);
+        EEPROM.commit();
     }
 
     String readString(int offset)
@@ -56,5 +57,10 @@ namespace Storage
     bool credentialsSet()
     {
         return EEPROM.read(0) == 0x55;
+    }
+
+    void initStorage(size_t size)
+    {
+        EEPROM.begin(size);
     }
 }
