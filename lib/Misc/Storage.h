@@ -11,16 +11,6 @@ namespace Storage
         String SSID;
     };
 
-    void storeString(int offset, String input)
-    {
-        input += "\n";
-        for (int i = 0; i < input.length(); i++)
-        {
-            EEPROM.write(i + offset, (byte)input.charAt(i));
-        }
-        return offset + input.length();
-    }
-
     void storeCredentials(t_Crendentials creds)
     {
         // Expensive operation both time and hardware. The eeprom is limited to ~ 100.000 writes so we want to be careful bout the state
@@ -30,20 +20,6 @@ namespace Storage
         offset++;
         EEPROM.put(offset, creds);
         EEPROM.commit();
-    }
-
-    String readString(int offset)
-    { // Kinda tested ig
-        char curr;
-        String build;
-        int i = 0;
-        while (curr != '\n')
-        {
-            build += curr;
-            curr = EEPROM.read(i + offset);
-            i++;
-        }
-        return build;
     }
 
     // Call after credentialsSet test only if true
